@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ClienteDTO } from './models/cliente.dto';
 import { RegistroDTO } from './models/registro.dto';
 import { AuthService } from './services/auth.service';
+import { RegistroService } from './services/registro.service';
+import { StorageService } from './services/storage.service';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +11,7 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['app.component.scss'],
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   public appPages = [
     { title: 'Cadastrar Produto', url: '/home/produtos', icon: 'bag-add' },
@@ -23,5 +25,35 @@ export class AppComponent {
     { title: 'Sair da conta', url: '/home/logout', icon: 'log-out' }
   ]; 
 
-  constructor(public authService: AuthService) { }
+  menu: string;
+
+  constructor(public authService: AuthService,
+    public storageService: StorageService,
+    public registroService: RegistroService) { }
+
+
+    ngOnInit() {
+    this.getUser();
+  }
+
+ getUser () {
+    let localUser = this.storageService.getLocalUser();
+    if (localUser && localUser.email)
+    {
+      this.registroService.findByEmail(localUser.email)
+      .subscribe(response=>
+        {
+         console.log("cliente logado");
+        },
+       catchError =>
+       {
+        console.log(catchError);
+        console.log("erro ao logar");
+       });
+    }
+  }
+
+  logout(){
+    this.authService.logout();
+  }
 }
