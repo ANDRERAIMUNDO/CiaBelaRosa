@@ -1,0 +1,66 @@
+  <ion-content *ngIf="!user" class="content"[fullscreen]="true">
+  <div class="ion-padding-top">
+  <div class="ion-padding">
+  <div class="ion-text-center">
+    <img src="../../assets/logobelarosa.png" />
+    <br>
+    <br>
+    <br>
+    <br>
+    <br> 
+    <form>
+      <div class="form-group">
+        <ion-item lines="full">
+          <ion-label position="floating">Email</ion-label>
+          <ion-input type="text" autocomplete="email" class="form-control" id="email" required [(ngModel)]="credenciais.email" name="email"> </ion-input>
+        </ion-item>
+      </div>
+      <div class="form-group">
+        <ion-item lines="full">
+          <ion-label position="floating">Password</ion-label>
+          <ion-input type={{senha}} class="form-control" id="password" required [(ngModel)]="credenciais.password" name="password"></ion-input>
+       
+        <ion-button id="container-button" color="light" fill="clear" slot="end" (click)="showPassword()">
+           <img id="imagem-visao" src="../../assets/visao.png"/>
+        </ion-button>
+        </ion-item>
+      </div>
+      <ion-row>
+        <ion-col>
+          <ion-button disabled = "{{button}}" type="submit" color="light" expand="block" (click)="login()">
+            Entrar
+            <ion-spinner *ngIf="sniper" color="secondary" duration = 3 > </ion-spinner>
+          </ion-button>
+            <a [routerLink]="['/forgot-password']" class="small-text">Recupera sua senha?</a>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+  </div>
+  </div>
+  </ion-content>
+
+  <ion-content *ngIf="user" class="content" [fullscreen]="true">
+    <div class="ion-padding-top">
+      <div class="ion-padding">
+        <div class="ion-text-center">
+            <img src="../../assets/logobelarosa.png" />
+            <br>
+            <br>
+            <br>
+            <br>
+            <br> 
+            <ion-label> Email ou senha estão incorretos. </ion-label>
+            <br>
+            <br>
+            <br>
+            <ion-button color="light" expand="block" (click)="reload()" > Entrar novamente </ion-button>
+        </div>
+      </div>
+    </div>
+      <ion-list>
+        <ion-item>
+          <a class="ion-text-center" [routerLink]="['/forgot-password']" class="small-text">Recupera sua senha?</a>
+        </ion-item>
+      </ion-list>
+  </ion-content >

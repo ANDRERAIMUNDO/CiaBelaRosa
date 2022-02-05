@@ -1,9 +1,14 @@
 import { Input, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
-import { CategoriaService } from 'src/app/services/categoria.service';
-import { CredenciaisDTO } from '../../models/credentiais.dto';
-import { AuthService } from '../../services/auth.service';
+import { AlertController } from '@ionic/angular';
+import { ClienteDTO } from 'src/app/models/cliente.dto';
+import { RegistroDTO } from 'src/app/models/registro.dto';
+import { AuthService } from 'src/app/services/auth.service';
+import { ClienteService } from 'src/app/services/cliente.service';
+import { EnderecoService } from 'src/app/services/endereco.service';
+import { ProdutoService } from 'src/app/services/produto.service';
+import { RegistroService } from 'src/app/services/registro.service';
+import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
   selector: 'app-home',
@@ -13,92 +18,67 @@ import { AuthService } from '../../services/auth.service';
 export class HomePage {
   public folder: string;
 
-  senha: string = "password";                                                                                                                                
-  credenciais: CredenciaisDTO = {
-    email: "",
-    password: ""
-  };
+  registroDTO: RegistroDTO;
+  clienteDTO: ClienteDTO;
 
-  erroLogin: string;
-  sniper : string;
-  button = false;
-  menu: string;
-
-  constructor(
+  public appPages =  [
+    { title: 'Cadastrar Produto', url: '/home/produtos', icon: 'bag-add' },
+    { title: 'Atualizar Catalogo', url: '/home/catalagos', icon: 'book'},
+    { title: 'Clientes', url: '/home/clientes', icon: 'people' },
+    { title: 'Vendas', url: '/home/vendas', icon: 'bag' },
+    { title: 'Pedidos recebidos', url: '/home/pedidos', icon: 'cash' },
+    { title: 'Pedidos pendentes', url: '/home/pendencias', icon: 'cart' },
+    { title: 'Configuracao de conta', url: 'home/config', icon: 'build' },
+    { title: 'Atualizar Serviços', url: '/home/upate', icon: 'reload' }
+  ]; 
+  
+  constructor(public produtoService: ProdutoService, 
     public router: Router,
-    public authService: AuthService,
-    public loadingController: LoadingController,
-    public categoriaService: CategoriaService,
-    private activatedRoute: ActivatedRoute) { }
-
+    public storageService: StorageService,
+    public registroService: RegistroService,
+    public enderecoService: EnderecoService,
+    public clienteService: ClienteService,
+    public alertController: AlertController,
+    private activatedRoute: ActivatedRoute,
+    public authService: AuthService) { }
 
     ionViewWillEnter() {
-        this.folder = this.activatedRoute.snapshot.paramMap.get('id');
-        this.wakeup();
-        this.sniper = null;
-        this.erroLogin = null;
-        this.refresh();
+       this.getMyData();
     }
 
-  refresh() {
-    this.authService.refreshToken()
-    .subscribe(response=>
+    getMyData() {
+      let localUser = this.storageService.getLocalUser();
+      if (localUser && localUser.email)
       {
-          this.authService.sucessLogin(response.headers.get('Authorization'));
-          this.menu = "menu";
-          this.button = false;//analisa
-          this.sniper = null;//analisa
-      }), catchError=> {
-            console.log(catchError);
+        this.registroService.findByEmail(localUser.email)
+        .subscribe(response=>
+          {
+            this.registroDTO = response as RegistroDTO;
+            this.folder = this.activatedRoute.snapshot.paramMap.get('id');
+            this.getCliente();
+          },
+         catchError =>
+         {
             this.router.navigate(['/login']);
+         });
       }
-  };
-   
-  wakeup() {
-    this.categoriaService.findAll()
-    .subscribe(response=>
-      {
-       console.log(response);
-      },
-        catchError=> {
-          console.log(catchError)  
-       });
-  }
+    }
 
-  login(){
-    this.button = true;
-    this.sniper = "ok";
-    this.authService.authetocation(this.credenciais)
-    .subscribe(response=> 
-      {
-      this.button = true;
-      this.sniper = "ok";
-      this.authService.sucessLogin(response.headers.get('Authorization'));
-      this.menu = "menu";
-      this.button = false;//analisa
-      this.sniper = null;//analisa
-      }, 
-      catchError=>
-      {
-        this.erroLogin = "erro";
-        this.button = false;
-        this.sniper = null;
-     //  }
-    });
-  }
+    getCliente() {
+      this.clienteService.findById(this.registroDTO.id)
+      .subscribe(response=>
+        {
+          this.clienteDTO = response as ClienteDTO;
+        },
+        catchError =>
+        {
+          console.log(catchError);
+        });
+    }
 
-  showPassword () {
-    let show = "text"
-    let hide = "password"
-    this.senha = show;
-    setTimeout(() => {
-      this.senha = hide;
-    }, 3000);
-  }
+    logout(){
+      this.authService.logout();
+      this.router.navigate(['/login']);
+    }
 
-  reload() {
-    this.erroLogin = null;
-    this.button = false;
-    this.sniper = null;
   }
-}
