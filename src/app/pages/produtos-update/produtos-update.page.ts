@@ -28,7 +28,11 @@ export class ProdutosUpdatePage implements OnInit {
         dateNasc: "",
         phone: ""
       },
-    imageUrl: ""
+    imageUrl: "",
+    perfis :
+      {
+       type: ""
+      }
   };
 
   clienteDTO: ClienteDTO = {
@@ -53,22 +57,27 @@ export class ProdutosUpdatePage implements OnInit {
     }
   
     getMyData(){
-     let localUser = this.storageService.getLocalUser();
-     console.log(localUser);
-      if (localUser && localUser.email)
-       {
-         this.registroService.findByEmail(localUser.email)
-          .subscribe(response=>
-            {
-              this.registroDTO = response as RegistroDTO;
-              this.getCliente();
-              console.log(this.registroDTO); 
-            })
-        } else 
-          {
-            this.router.navigate(['/login']);
-          }
-    }
+      let localUser = this.storageService.getLocalUser();
+      console.log(localUser);
+       if (localUser && localUser.email)
+        {
+          this.registroService.findByEmail(localUser.email)
+           .subscribe(response=>
+             {
+               this.registroDTO = response as RegistroDTO;
+                 if(this.registroDTO.perfis.type == 'ADMIN'){
+                     this.getCliente(); 
+                   } else {
+                     this.acessoNegado();
+                     this.router.navigate(['/login']);
+                   }
+               console.log(this.registroDTO); 
+             })
+         } else 
+           {
+             this.router.navigate(['/login']);
+           }
+     }
   
     getCliente() {
       this.clienteService.findById(this.registroDTO.id)
@@ -109,5 +118,17 @@ export class ProdutosUpdatePage implements OnInit {
   logout(){
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  async acessoNegado() {
+    const alert = await this.alertController.create({
+      subHeader: 'Antenção',
+      message: 'Você não possui privilegios para acessar o conteudo!',
+      buttons: ['Continuar']
+    });
+    await alert.present();
+    const {role} = await alert.onDidDismiss();
+    console.log(role);
+    this.logout();
   }
 }

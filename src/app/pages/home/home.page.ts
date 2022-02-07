@@ -28,7 +28,11 @@ export class HomePage implements OnInit {
         dateNasc: "",
         phone: ""
       },
-    imageUrl: ""
+    imageUrl: "",
+    perfis :
+      {
+        type:""
+      }
   };
 
   clienteDTO: ClienteDTO = {
@@ -63,7 +67,14 @@ export class HomePage implements OnInit {
           .subscribe(response=>
             {
               this.registroDTO = response as RegistroDTO;
-              this.getCliente();
+              console.log(this.registroDTO);
+              console.log(this.registroDTO.perfis);
+                if(this.registroDTO.perfis.type == 'ADMIN'){
+                    this.getCliente(); 
+                  } else {
+                    this.acessoNegado();
+                    this.router.navigate(['/login']);
+                  }
               console.log(this.registroDTO); 
             })
         } else 
@@ -113,4 +124,16 @@ export class HomePage implements OnInit {
       this.router.navigate(['/login']);
     }
 
+    async acessoNegado() {
+      const alert = await this.alertController.create({
+        subHeader: 'Antenção',
+        message: 'Você não possui privilegios para acessar o conteudo!',
+        buttons: ['Continuar']
+      });
+      await alert.present();
+      const {role} = await alert.onDidDismiss();
+      console.log(role);
+      this.logout();
+    }
+  
   }
