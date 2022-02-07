@@ -1,8 +1,8 @@
 {
   "name": "CiaBelaRosa",
   "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "author": "Andre Raimundo",
+  "homepage": "https://andreraimundo.me/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

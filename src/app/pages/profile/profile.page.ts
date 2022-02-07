@@ -1,5 +1,5 @@
-import { Input, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
 import { RegistroDTO } from 'src/app/models/registro.dto';
@@ -11,11 +11,11 @@ import { RegistroService } from 'src/app/services/registro.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.page.html',
-  styleUrls: ['./home.page.scss'],
+  selector: 'app-profile',
+  templateUrl: './profile.page.html',
+  styleUrls: ['./profile.page.scss'],
 })
-export class HomePage implements OnInit {
+export class ProfilePage implements OnInit {
 
   registroDTO: RegistroDTO = {
     id: "",
@@ -38,8 +38,6 @@ export class HomePage implements OnInit {
     dateNasc: "",
     phone: "" 
   }
-
-
   
   constructor(public produtoService: ProdutoService, 
     public router: Router,
@@ -49,7 +47,6 @@ export class HomePage implements OnInit {
     public clienteService: ClienteService,
     public alertController: AlertController,
     public authService: AuthService) { }
-
     ngOnInit() {
       this.getMyData();
     }
@@ -83,34 +80,33 @@ export class HomePage implements OnInit {
           this.router.navigate(['/login']);
         });
     }
-    
-    atualizarCatalago() {
-      this.router.navigate(['/home/produtos/produtos-update']);
-    }
-  
-    meusProdutos() {
-      this.router.navigate(['/home/produtos']);
-    }
-  
-    meusClientes() {
-      this.router.navigate(['/home/clientes']);
-    }
-  
-    meusPedidos() {
-      this.router.navigate(['/home/pedidos']);
-    }
-  
-    pedidosPendentes() {
-      this.router.navigate(['/home/pedidos/pedidos-pendentes']);
-    }
-  
-    configuracoes() {
-      this.router.navigate(['/home/profile']); 
-    }
 
-    logout(){
-      this.authService.logout();
-      this.router.navigate(['/login']);
-    }
-
+  atualizarCatalago() {
+    this.router.navigate(['/home/produtos/produtos-update']);
   }
+
+  meusProdutos() {
+    this.router.navigate(['/home/produtos']);
+  }
+
+  meusClientes() {
+    this.router.navigate(['/home/clientes']);
+  }
+
+  meusPedidos() {
+    this.router.navigate(['/home/pedidos']);
+  }
+
+  pedidosPendentes() {
+    this.router.navigate(['/home/pedidos/pedidos-pendentes']);
+  }
+
+  configuracoes() {
+    this.router.navigate(['/home/profile']); 
+  }
+
+  logout(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+}

@@ -1,16 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
-import { CredenciaisDTO } from '../models/credentiais.dto';
-import { AuthService } from '../services/auth.service';
-import { CategoriaService } from '../services/categoria.service';
+import { CredenciaisDTO } from '../../models/credentiais.dto';
+import { AuthService } from '../../services/auth.service';
+import { CategoriaService } from '../../services/categoria.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
 
   senha: string = "password";                                                                                                                                
   credenciais: CredenciaisDTO = {
@@ -26,32 +26,33 @@ export class LoginPage {
     public router: Router,
     public authService: AuthService,
     public loadingController: LoadingController,
-    public categoriaService: CategoriaService,
-    private activatedRoute: ActivatedRoute) { }
+    public categoriaService: CategoriaService) { }
 
-    ionViewWillEnter() {
+    ngOnInit() {
       this.user = null;
       this.wakeup();
-      this.sniper = null;
       this.refresh();
+      this.sniper = null;
+    
   }
   refresh() {
     this.authService.refreshToken()
-    .subscribe(response=>
-      {
-          this.authService.sucessLogin(response.headers.get('Authorization'));
-          this.router.navigate(['/home/vendas']);
-      }), catchError=> {
-            console.log(catchError);
-            this.router.navigate(['/login']);
-      }
-  };
+      .subscribe(response=>
+        {
+            this.authService.sucessLogin(response.headers.get('Authorization'));
+            this.router.navigate(['/home']);
+        },
+        catchError=> {
+              console.log(catchError);
+              this.router.navigate(['/login']);
+          }
+      )};
    
   wakeup() {
     this.categoriaService.findAll()
     .subscribe(response=>
       {
-       console.log(response);
+       console.log("ok");
       },
         catchError=> {
           console.log(catchError)  
@@ -67,14 +68,14 @@ export class LoginPage {
       this.button = true;
       this.sniper = "ok";
       this.authService.sucessLogin(response.headers.get('Authorization'));
-      this.router.navigate(['/home/vendas']);
+      this.router.navigate(['/home']);
       }, 
       catchError=>
       {
         this.user = "erro"
         this.button = false;
         this.sniper = null;
-     //  }
+        this.router.navigate(['/login']);
     });
   }
 

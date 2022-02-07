@@ -5,13 +5,12 @@ import { API_CONFIG } from "src/config/config";
 import { ClienteDTO } from "../models/cliente.dto";
 import { ClienteNewDTO } from "../models/clienteNew.dto";
 import { ClienteUpdateDTO } from "../models/clienteUpdate.dto";
-import { Endereco } from "../models/endereco";
 import { StorageService } from "./storage.service"; 
 
 @Injectable()
 export class ClienteService {
   
-    constructor(public httpClient: HttpClient,public storageService: StorageService){}
+    constructor(public httpClient: HttpClient, public storageService: StorageService){}
 
     findById(id: string) {
         let token = this.storageService.getLocalUser().token;
