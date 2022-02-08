@@ -31,22 +31,22 @@ export class LoginPage implements OnInit {
     ngOnInit() {
       this.user = null;
       this.wakeup();
-      this.refresh();
+      this.refresh;
       this.sniper = null;
     
   }
+
   refresh() {
     this.authService.refreshToken()
-      .subscribe(response=>
-        {
-            this.authService.sucessLogin(response.headers.get('Authorization'));
-            this.router.navigate(['/home']);
-        },
-        catchError=> {
-              console.log(catchError);
-              this.router.navigate(['/login']);
-          }
-      )};
+    .subscribe(response=>
+      {
+          this.authService.sucessLogin(response.headers.get('Authorization'));
+          this.router.navigate(['/home'])
+      }), catchError=> {
+            console.log(catchError);
+            this.router.navigate(['/login']);
+      }
+  };
    
   wakeup() {
     this.categoriaService.findAll()

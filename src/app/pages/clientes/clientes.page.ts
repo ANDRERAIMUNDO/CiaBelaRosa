@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { catchError } from 'rxjs/operators';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
 import { RegistroDTO } from 'src/app/models/registro.dto';
 import { AuthService } from 'src/app/services/auth.service';
@@ -15,6 +14,10 @@ import { StorageService } from 'src/app/services/storage.service';
   styleUrls: ['./clientes.page.scss'],
 })
 export class ClientesPage implements OnInit {
+
+  data: string;
+  clientes: ClienteDTO [] = [];
+  page: number = 0;
 
   registroDTO: RegistroDTO = {
     id: "",
@@ -30,7 +33,7 @@ export class ClientesPage implements OnInit {
     imageUrl: "",
     perfis :
     {
-      type:""
+      type: ""
     }
   };
 
@@ -52,28 +55,29 @@ export class ClientesPage implements OnInit {
     ngOnInit() {
     this.getMyData();
   }
+
   getMyData(){
     let localUser = this.storageService.getLocalUser();
-    console.log(localUser);
      if (localUser && localUser.email)
       {
         this.registroService.findByEmail(localUser.email)
          .subscribe(response=>
            {
              this.registroDTO = response as RegistroDTO;
-             if(this.registroDTO.perfis.type == "ADMIN"){
-                   this.getCliente(); 
-                 } else {
-                   this.acessoNegado();
-                   this.router.navigate(['/login']);
-                 }
-             console.log(this.registroDTO); 
-           })
-       } else 
-         {
-           this.router.navigate(['/login']);
-         }
-   }
+             this.getCliente();
+             if(this.registroDTO.perfis !=  'CLIENTE' && 'ADMIN'){
+               console.log("ok");
+             } else {
+               this.acessoNegado();
+               this.router.navigate(['/login']);
+             }
+       })
+   } else 
+     {
+       this.router.navigate(['/login']);
+     }
+  }  
+
   getCliente() {
     this.clienteService.findById(this.registroDTO.id)
     .subscribe(response=>
@@ -83,6 +87,22 @@ export class ClientesPage implements OnInit {
       catchError =>
       {
         this.router.navigate(['/login']);
+      });
+  }
+
+  findPage() {
+    const name = '';
+    this.clienteService.findPage(name, this.page, 12)
+    .subscribe(response =>
+      {
+        let start = this.clientes.length;
+        this.clientes = this.clientes.concat(response['content']);
+        let end = this.clientes.length -1;
+        console.log(this.clientes);
+      },
+      catchError =>                                                                                                                                                                                                                                                                                               
+      {
+        console.log(catchError);
       });
   }
 
@@ -125,5 +145,17 @@ export class ClientesPage implements OnInit {
     const {role} = await alert.onDidDismiss();
     console.log(role);
     this.logout();
+  }
+
+  onInputFindPage(event: any){
+    this.page = 0;
+    this.clientes = [];
+    const name = event.target.value;
+    this.clienteService.findPage(name,this.page,0)
+    .subscribe(response => {
+      let start = this.clientes.length;
+      this.clientes = this.clientes.concat(response['content']);  
+      let end = this.clientes.length -1;
+    });
   }
 }

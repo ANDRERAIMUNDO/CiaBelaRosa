@@ -60,28 +60,26 @@ export class HomePage implements OnInit {
   
     getMyData(){
      let localUser = this.storageService.getLocalUser();
-     console.log(localUser);
       if (localUser && localUser.email)
        {
          this.registroService.findByEmail(localUser.email)
           .subscribe(response=>
             {
               this.registroDTO = response as RegistroDTO;
-              console.log(this.registroDTO);
-              console.log(this.registroDTO.perfis);
-                if(this.registroDTO.perfis.type == 'ADMIN'){
-                    this.getCliente(); 
-                  } else {
-                    this.acessoNegado();
-                    this.router.navigate(['/login']);
-                  }
-              console.log(this.registroDTO); 
-            })
-        } else 
-          {
-            this.router.navigate(['/login']);
-          }
-    }
+              this.getCliente();
+              if(this.registroDTO.perfis !=  'CLIENTE' && 'ADMIN'){
+                console.log("ok");
+              } else {
+                this.acessoNegado();
+                this.router.navigate(['/login']);
+              }
+        })
+    } else 
+      {
+        this.router.navigate(['/login']);
+      }
+}
+
   
     getCliente() {
       this.clienteService.findById(this.registroDTO.id)
@@ -136,4 +134,10 @@ export class HomePage implements OnInit {
       this.logout();
     }
   
+  }
+
+  export interface Perfil {
+    0: string;
+    1: string;
+  //  CLIENTE = 1,
   }

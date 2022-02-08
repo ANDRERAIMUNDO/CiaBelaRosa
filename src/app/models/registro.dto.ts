@@ -6,5 +6,5 @@ export interface RegistroDTO {
   email: string;
   cliente: ClienteDTO;
   imageUrl?: string;
-  perfis: Perfil;
+  perfis: any;
 }

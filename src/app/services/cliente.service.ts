@@ -31,5 +31,11 @@ export class ClienteService {
     viaCep (cep: string): Observable<any> {
         return this.httpClient.get(`${API_CONFIG.viaCepUrl}/${cep}/json`);
     }
+
+    findPage(name: string, page: number=0, linesPerPages: number=12) {
+        let token = this.storageService.getLocalUser().token;
+        let authHeader = new HttpHeaders ({'Authorization': 'Bearer '+ token});
+        return this.httpClient.get(`${API_CONFIG.baseUrl}/clientes/page/?name=${name}&page=${page}&linesPerPages=${linesPerPages}`, { 'headers': authHeader});
+    }
 }
 //https://viacep.com.br/ws/66123120/json/

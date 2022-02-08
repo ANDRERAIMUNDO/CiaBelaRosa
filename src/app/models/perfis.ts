@@ -1,3 +1,3 @@
 export interface Perfil {
-type: string;
+type: any;
 }
