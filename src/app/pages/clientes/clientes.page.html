@@ -1,7 +1,47 @@
+<ion-router-outlet id="main"></ion-router-outlet>
+<ion-header id="container-header">
+  <ion-toolbar>
+    <br>
+    <br>
+      <div>
+        <ion-note>Bela Rosa - Clientes</ion-note >  
+      </div>
+    <ion-searchbar (ionInput)="onInputFindPage($event)"  placeholder="buscar clientes ? "></ion-searchbar>
+  </ion-toolbar>
+    <ion-content>
+      <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <br>
+        <a>Arraste para baixo para atualiar.</a>
+        <br>
+        <ion-icon id="ion-icon-refresher" name="arrow-down-outline"></ion-icon>
+        <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+      </ion-refresher>
+    </ion-content>
+
+</ion-header> 
+
+<ion-content id="container">
+  <div>
+    <ion-list>
+      <ion-item *ngFor="let item of clientes" (click)="clienteDetails(item.id)">
+        <ion-thumbnail slot="start" item-start>
+          <img src="../../assets/icon/camera-outline.svg">
+        </ion-thumbnail>
+        <p class="ion-text-center">{{item.name}}</p>
+      </ion-item>
+    </ion-list>  
+  </div>
+</ion-content>
+
 <ion-menu side="start" menuId="first" contentId="main">
   <ion-header>
       <ion-toolbar color="light">
-        <ion-title>Painel</ion-title>
+        <br>
+        <ion-title>Bela Rosa</ion-title>
+        <br>
+        <a>{{registroDTO?.cliente?.name}}</a>
+        <br>
+        <a>{{registroDTO?.email}}</a>
       </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -17,17 +57,9 @@
   </ion-content>
 </ion-menu>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Bela Rosa - Clientes</ion-title>
-      <ion-searchbar (ionInput)="onInputFindPage($event)"  placeholder="buscar clientes?" ></ion-searchbar>
-    </ion-toolbar>
-  </ion-header>
-    <div id="container">
-      <strong class="capitalize">conteudo aqui</strong>
-      <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-    </div>
-  </ion-content>
-
-  <ion-router-outlet id="main"></ion-router-outlet>
+<!-- Fade Footer -->
+<ion-footer collapse="fade">
+  <ion-toolbar>
+    <a>@BelaRosa 2022 - Possui direitos reservados</a>
+  </ion-toolbar>
+</ion-footer>

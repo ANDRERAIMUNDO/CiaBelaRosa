@@ -54,6 +54,7 @@ export class ClientesPage implements OnInit {
 
     ngOnInit() {
     this.getMyData();
+    this. getAllCliente();
   }
 
   getMyData(){
@@ -90,6 +91,23 @@ export class ClientesPage implements OnInit {
       });
   }
 
+  
+  getAllCliente() {
+    const name = '';
+    this.clienteService.findPage(name, this.page, 12)
+    .subscribe(response =>
+      {
+        let start = this.clientes.length;
+        this.clientes = this.clientes.concat(response['content']);
+        let end = this.clientes.length -1;
+     //   this.loadImage(start, end);
+      },
+      catchError =>                                                                                                                                                                                                                                                                                               
+      {
+        console.log(catchError);
+      });
+  }
+
   findPage() {
     const name = '';
     this.clienteService.findPage(name, this.page, 12)
@@ -104,6 +122,10 @@ export class ClientesPage implements OnInit {
       {
         console.log(catchError);
       });
+  }
+
+  clienteDetails(cliente_id: string) {
+    this.router.navigate(['../clientes/cliente-detail', {cliente_id: cliente_id}]);
   }
 
   atualizarCatalago() {
@@ -151,11 +173,30 @@ export class ClientesPage implements OnInit {
     this.page = 0;
     this.clientes = [];
     const name = event.target.value;
-    this.clienteService.findPage(name,this.page,0)
+    this.clienteService.findPage(name,this.page,24)
+    .subscribe(response => {
+      let start = this.clientes.length;
+      this.clientes = this.clientes.concat(response['content']);
+      console.log(this.clientes);  
+      let end = this.clientes.length -1;
+    });
+  }
+
+
+  doRefresh(event) {
+    this.page = 0;
+    this.clientes = [];
+    const name = event.target.value;
+    this.clienteService.findPage(name,this.page,24)
     .subscribe(response => {
       let start = this.clientes.length;
       this.clientes = this.clientes.concat(response['content']);  
       let end = this.clientes.length -1;
+     // this.loadImage(start, end);
     });
+    this.getAllCliente();
+    setTimeout(() => {
+      event.target.complete();
+    }, 3000);
   }
 }
