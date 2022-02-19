@@ -5,4 +5,4 @@ export const API_CONFIG ={
   mercadopagoUrl: "https://api.mercadopago.com/v1"
 }
 
-// baseUrl : "http://localhost:8080",
+//baseUrl : "http://localhost:8080",

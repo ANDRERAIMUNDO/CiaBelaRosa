@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { NavigationExtras, Router } from '@angular/router';
+import { AlertController, NavParams } from '@ionic/angular';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
 import { RegistroDTO } from 'src/app/models/registro.dto';
 import { AuthService } from 'src/app/services/auth.service';
@@ -12,38 +12,15 @@ import { StorageService } from 'src/app/services/storage.service';
   selector: 'app-clientes',
   templateUrl: './clientes.page.html',
   styleUrls: ['./clientes.page.scss'],
+  providers: [NavParams]
 })
 export class ClientesPage implements OnInit {
 
   data: string;
   clientes: ClienteDTO [] = [];
   page: number = 0;
-
-  registroDTO: RegistroDTO = {
-    id: "",
-    email: "",
-    cliente: 
-      {
-        id: "",
-        name: "",
-        cpf: "",
-        dateNasc: "",
-        phone: ""
-      },
-    imageUrl: "",
-    perfis :
-    {
-      type: ""
-    }
-  };
-
-  clienteDTO: ClienteDTO = {
-    id: "",
-    name: "",
-    cpf: "",
-    dateNasc: "",
-    phone: "" 
-  }
+  registroDTO: RegistroDTO;
+  clienteDTO: ClienteDTO;
 
   constructor( public router: Router, 
     public authService: AuthService,
@@ -106,26 +83,15 @@ export class ClientesPage implements OnInit {
       {
         console.log(catchError);
       });
-  }
+  } 
 
-  findPage() {
-    const name = '';
-    this.clienteService.findPage(name, this.page, 12)
-    .subscribe(response =>
-      {
-        let start = this.clientes.length;
-        this.clientes = this.clientes.concat(response['content']);
-        let end = this.clientes.length -1;
-        console.log(this.clientes);
-      },
-      catchError =>                                                                                                                                                                                                                                                                                               
-      {
-        console.log(catchError);
-      });
-  }
-
-  clienteDetails(cliente_id: string) {
-    this.router.navigate(['../clientes/cliente-detail', {cliente_id: cliente_id}]);
+  clienteDetails(registro_id: string) {
+    let navigationExtras: NavigationExtras = {
+      state: {
+        registro_id: registro_id
+      }
+    };
+    this.router.navigate(['home/clientes/cliente-detail'], navigationExtras);
   }
 
   atualizarCatalago() {
@@ -177,7 +143,6 @@ export class ClientesPage implements OnInit {
     .subscribe(response => {
       let start = this.clientes.length;
       this.clientes = this.clientes.concat(response['content']);
-      console.log(this.clientes);  
       let end = this.clientes.length -1;
     });
   }

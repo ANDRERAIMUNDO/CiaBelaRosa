@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
 import { Endereco } from 'src/app/models/endereco';
@@ -16,11 +16,12 @@ import { RegistroService } from 'src/app/services/registro.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
-  selector: 'app-cliente-detail',
-  templateUrl: './cliente-detail.page.html',
-  styleUrls: ['./cliente-detail.page.scss'],
+  selector: 'app-pedidos-detail',
+  templateUrl: './pedidos-detail.page.html',
+  styleUrls: ['./pedidos-detail.page.scss'],
 })
-export class ClienteDetailPage implements OnInit {
+export class PedidosDetailPage implements OnInit {
+
 
   registro_id: string;
   user: RegistroDTO;
@@ -28,7 +29,6 @@ export class ClienteDetailPage implements OnInit {
   clienteDTO: ClienteDTO;
   endereco: Endereco;
   pedidoDTO: PedidoDTO [] = [];
-  pedido: any [] = [];
   page: number = 0;
 
   constructor(public cardService: CardService, 
@@ -107,7 +107,7 @@ export class ClienteDetailPage implements OnInit {
       });
   }
 
-  getEndereco() {
+  getEndereco(){
     let registro_id = this.registro_id;
     this.enderecoService.findById(registro_id)
     .subscribe(response=>
@@ -123,44 +123,19 @@ export class ClienteDetailPage implements OnInit {
 
   findByPedidoId() {
     const name = '';
-    this.pedidoService.findByPedidoId(name, this.page, 3)
+    this.pedidoService.findByPedidoId(name, this.page, 24)
     .subscribe(response =>
       {
-        let start = this.pedido.length;
-        this.pedido = this.pedido.concat(response['content']);
-        console.log(this.pedido);
-        let end = this.pedido.length -1;
+        let start = this.pedidoDTO.length;
+        this.pedidoDTO = this.pedidoDTO.concat(response['content']);
+        console.log(this.pedidoDTO);
+        let end = this.pedidoDTO.length -1;
      //   this.loadImage(start, end);
       },
       catchError =>                                                                                                                                                                                                                                                                                               
       {
         console.log(catchError);
       });
-  }
-
-  getFindPedidos (registro_id: string) {
-    let navigationExtras: NavigationExtras = {
-      state: {
-        registro_id: registro_id
-      }
-    };
-    this.router.navigate(['home/clientes/cliente-detail/pedidos-detail'], navigationExtras);
-  }
-
-  atualizarSenha() {
-    console.log("atualizar senha");
-  }
-
-  atulizarRegistro() {
-    console.log("atualizar registro");
-  }
-
-  removerRegistro() {
-    console.log("remover registro");
-  }
-
-  atualizarEndereco() {
-    console.log("atualizar endereco");
   }
 
   logout(){

@@ -1,9 +1,87 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>cliente-detail</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button>back</ion-back-button>
+    </ion-buttons>
+    <ion-title><h5>Painel do cliente</h5></ion-title>
+    <a>{{user?.cliente?.name}}</a>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-<p>cliente-detail</p>
-</ion-content>
+  <ion-item>
+    <ion-avatar slot="start">
+      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-avatar>
+    <ion-label>{{user?.cliente?.name}}</ion-label>
+  </ion-item>
+  <br>
+  <p id="text-center">Informações pessoas</p>
+  <ion-item>
+<!-- fab placed in the center of the content with a list on each side -->
+    <ion-fab horizontal="end">
+      <ion-fab-button>
+        <ion-icon name="share"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-list side="top">
+        <ion-fab-button (click)="atualizarSenha()"><ion-icon name="key-outline"></ion-icon></ion-fab-button>
+      </ion-fab-list>
+      <ion-fab-list side="bottom">
+        <ion-fab-button (click)="atulizarRegistro()"><ion-icon name="reader-outline"></ion-icon></ion-fab-button>
+      </ion-fab-list>
+      <ion-fab-list side="start">
+        <ion-fab-button (click)="removerRegistro()"><ion-icon name="trash-outline"></ion-icon></ion-fab-button>
+      </ion-fab-list>  
+    </ion-fab>
+    <ion-label class="ion-text-wrap">
+      <ion-text>
+        <p>Codigo registro:</p><p id="p-user">{{user?.id}}</p> 
+        <p>Email:</p><p id="p-user">{{user?.email}}</p>
+        <p>Codigo cliente:</p><p id="p-user">{{user?.cliente?.id}}</p> 
+        <p>Nome:</p><p id="p-user">{{user?.cliente?.name}}</p>
+        <p>CPF:</p><p id="p-user">{{user?.cliente?.cpf}}</p>
+        <p>Nascimento:</p><p id="p-user">{{user?.cliente?.dateNasc}}</p> 
+        <p>Telefone:</p><p id="p-user">{{user?.cliente?.phone}}</p> 
+        <p>Usuario:</p><p id="p-user">{{user?.perfis?.type}}</p>
+      </ion-text>
+    </ion-label>
+  </ion-item>
+  <p id="text-center">Registro de endereço</p>
+  <ion-item>
+    <!-- fab placed in the center of the content with a list on each side -->
+    <ion-fab-button slot="end" (click)="atualizarEndereco()"><ion-icon name="reader-outline"></ion-icon></ion-fab-button>
+    <ion-text>
+      {{endereco?.id}}: 
+      {{endereco?.logradouro}}, {{endereco?.numero}}, {{endereco?.complemento}},
+      {{endereco?.bairro}}, {{endereco?.cep}} - {{endereco?.cep}} ,{{endereco?.localidade}},{{endereco?.uf}}
+    </ion-text>
+  </ion-item>
+  <p id="text-center">Ultimos Pedidos</p>
+  <ion-list>
+    <ion-item *ngFor="let ped of pedido">
+      <ion-item >
+        <ion-thumbnail slot="start" item-start>
+            <img src="../../assets/icon/camera-outline.svg">
+        </ion-thumbnail>
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <p id="p-user">{{ped.instante}}</p> 
+              <p id="p-user">{{ped.itens[0].produto.name}}</p>
+              <p id="p-user">{{ped.pagamento.situacaoPedido}}</p>
+            </ion-text>
+          </ion-label>
+
+      </ion-item>
+    </ion-item>
+  </ion-list>
+  <ion-item></ion-item>
+  <div id="text-center" (click)="getFindPedidos(user?.id)"> 
+    <ion-icon id="ion-icon" name="receipt-outline"></ion-icon>
+    <p id="p-user" class="top-item">Todos os pedidos</p> 
+  </div>
+<!-- Fade Footer -->
+<ion-footer collapse="fade">
+  <ion-toolbar>
+    <a>@BelaRosa 2022 - Possui direitos reservados</a>
+  </ion-toolbar>
+</ion-footer>

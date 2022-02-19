@@ -32,6 +32,7 @@ export class ClienteService {
         return this.httpClient.get(`${API_CONFIG.viaCepUrl}/${cep}/json`);
     }
 
+    
     findPage(name: string, page: number=0, linesPerPages: number=24) {
         let token = this.storageService.getLocalUser().token;
         let authHeader = new HttpHeaders ({'Authorization': 'Bearer '+ token});

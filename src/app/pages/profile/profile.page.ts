@@ -17,31 +17,8 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class ProfilePage implements OnInit {
 
-  registroDTO: RegistroDTO = {
-    id: "",
-    email: "",
-    cliente: 
-      {
-        id: "",
-        name: "",
-        cpf: "",
-        dateNasc: "",
-        phone: ""
-      },
-    imageUrl: "",
-    perfis :
-    {
-     type: ""
-    }
-  };
-
-  clienteDTO: ClienteDTO = {
-    id: "",
-    name: "",
-    cpf: "",
-    dateNasc: "",
-    phone: "" 
-  }
+  registroDTO: RegistroDTO;
+  clienteDTO: ClienteDTO;
   
   constructor(public produtoService: ProdutoService, 
     public router: Router,

@@ -10,3 +10,7 @@ export interface PedidoDTO {
   itens: ItemPedidoDTO[];
   id?: string;
   }
+
+  //analisar a adição de statusPaymeny e processPayment RefDTO
+
+  //instante

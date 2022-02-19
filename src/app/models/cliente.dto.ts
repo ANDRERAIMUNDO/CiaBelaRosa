@@ -1,3 +1,4 @@
+import { Pedido } from "./pedido";
 
 export interface ClienteDTO {
   id: string;
