@@ -28,7 +28,7 @@ export class PedidosDetailPage implements OnInit {
   registroDTO: RegistroDTO;
   clienteDTO: ClienteDTO;
   endereco: Endereco;
-  pedidoDTO: PedidoDTO [] = [];
+  pedido: any [] = [];
   page: number = 0;
 
   constructor(public cardService: CardService, 
@@ -126,10 +126,10 @@ export class PedidosDetailPage implements OnInit {
     this.pedidoService.findByPedidoId(name, this.page, 24)
     .subscribe(response =>
       {
-        let start = this.pedidoDTO.length;
-        this.pedidoDTO = this.pedidoDTO.concat(response['content']);
-        console.log(this.pedidoDTO);
-        let end = this.pedidoDTO.length -1;
+        let start = this.pedido.length;
+        this.pedido = this.pedido.concat(response['content']);
+        console.log(this.pedido);
+        let end = this.pedido.length -1;
      //   this.loadImage(start, end);
       },
       catchError =>                                                                                                                                                                                                                                                                                               
@@ -138,6 +138,7 @@ export class PedidosDetailPage implements OnInit {
       });
   }
 
+  
   logout(){
     this.authService.logout();
     this.router.navigate(['/login']);
