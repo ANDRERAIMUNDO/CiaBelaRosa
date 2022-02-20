@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { ActionSheetController, AlertController } from '@ionic/angular';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
 import { Endereco } from 'src/app/models/endereco';
+import { NewPasswordDTO } from 'src/app/models/new-password.dto';
 import { PedidoDTO } from 'src/app/models/pedido.dto';
 import { RegistroDTO } from 'src/app/models/registro.dto';
 import { AuthService } from 'src/app/services/auth.service';
@@ -23,6 +25,8 @@ import { StorageService } from 'src/app/services/storage.service';
 export class ClienteDetailPage implements OnInit {
 
   registro_id: string;
+  cliente_id: string;
+  endereco_id: string;
   user: RegistroDTO;
   registroDTO: RegistroDTO;
   clienteDTO: ClienteDTO;
@@ -30,7 +34,15 @@ export class ClienteDetailPage implements OnInit {
   pedidoDTO: PedidoDTO [] = [];
   pedido: any [] = [];
   page: number = 0;
+  sniper: string;
+  newPasswordDTO: NewPasswordDTO =
+  {
+    email: ""
+  };
+  router_registro_cliente: string;
+  router_endereco: string;
 
+  
   constructor(public cardService: CardService, 
     public storageService: StorageService,
     public route: ActivatedRoute, 
@@ -53,6 +65,7 @@ export class ClienteDetailPage implements OnInit {
      }
 
   ngOnInit() {
+    this.sniper = null;
     this.getMyData();
     this.registroDetail();
   }
@@ -84,6 +97,7 @@ export class ClienteDetailPage implements OnInit {
     .subscribe(response=>
       {
          this.clienteDTO = response as ClienteDTO;
+         this.cliente_id = this.clienteDTO.id;
          this.findByPedidoId();
          this.getEndereco();
       },
@@ -113,6 +127,7 @@ export class ClienteDetailPage implements OnInit {
     .subscribe(response=>
       {
         this.endereco = response as Endereco;
+        this.endereco_id = this.endereco.id;
       },
      catchError =>
       {
@@ -148,19 +163,51 @@ export class ClienteDetailPage implements OnInit {
   }
 
   atualizarSenha() {
-    console.log("atualizar senha");
+    this.sniper = "ok";
+      this.newPasswordDTO.email = this.user.email;
+      this.authService.sendNewPassword(this.newPasswordDTO)
+      .subscribe(response=>
+        {
+          this.sniper = null;
+        }, catchError => 
+          {
+            this.sniper = null;
+            this.presentError();
+          });    
   }
 
   atulizarRegistro() {
-    console.log("atualizar registro");
+    this.router_registro_cliente = "ok";
+    let router_registro_cliente = this.router_registro_cliente;
+    let registro_id = this.registro_id;
+    let cliente_id = this.cliente_id;
+      let navigationExtras: NavigationExtras = {
+        state: {
+          router_registro_cliente: router_registro_cliente,
+          registro_id: registro_id,
+          cliente_id: cliente_id
+        }
+      };
+      this.router.navigate(['home/clientes/cliente-detail/update-registro'], navigationExtras);
   }
 
   removerRegistro() {
     console.log("remover registro");
   }
 
-  atualizarEndereco() {
-    console.log("atualizar endereco");
+  atualizarEndereco () {
+    this.router_endereco = "ok";
+    let router_endereco = this.router_endereco;
+    let registro_id = this.registro_id;
+    let endereco_id = this.endereco_id;
+      let navigationExtras: NavigationExtras = {
+        state: {
+          router_endereco: router_endereco,
+          registro_id: registro_id,
+          endereco_id: endereco_id
+        }
+      };
+      this.router.navigate(['home/clientes/cliente-detail/update-registro'], navigationExtras);
   }
 
   logout(){
@@ -178,6 +225,17 @@ export class ClienteDetailPage implements OnInit {
     const {role} = await alert.onDidDismiss();
     console.log(role);
     this.logout();
+  }
+
+  async presentError() {
+    const alert = await this.alertController.create({
+      header: 'Não foi possivel atualizar',
+      message: 'Atualize a pagina e tente novamente',
+      buttons: ['OK']
+    });
+    await alert.present();
+    const { role } = await alert.onDidDismiss();
+    console.log('onDidDismiss resolved with role', role);
   }
 
 }

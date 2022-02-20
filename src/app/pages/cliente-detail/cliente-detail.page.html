@@ -17,35 +17,42 @@
   </ion-item>
   <br>
   <p id="text-center">Informações pessoas</p>
-  <ion-item>
-<!-- fab placed in the center of the content with a list on each side -->
-    <ion-fab horizontal="end">
-      <ion-fab-button>
-        <ion-icon name="share"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-list side="top">
-        <ion-fab-button (click)="atualizarSenha()"><ion-icon name="key-outline"></ion-icon></ion-fab-button>
-      </ion-fab-list>
-      <ion-fab-list side="bottom">
-        <ion-fab-button (click)="atulizarRegistro()"><ion-icon name="reader-outline"></ion-icon></ion-fab-button>
-      </ion-fab-list>
-      <ion-fab-list side="start">
-        <ion-fab-button (click)="removerRegistro()"><ion-icon name="trash-outline"></ion-icon></ion-fab-button>
-      </ion-fab-list>  
-    </ion-fab>
-    <ion-label class="ion-text-wrap">
-      <ion-text>
-        <p>Codigo registro:</p><p id="p-user">{{user?.id}}</p> 
-        <p>Email:</p><p id="p-user">{{user?.email}}</p>
-        <p>Codigo cliente:</p><p id="p-user">{{user?.cliente?.id}}</p> 
-        <p>Nome:</p><p id="p-user">{{user?.cliente?.name}}</p>
-        <p>CPF:</p><p id="p-user">{{user?.cliente?.cpf}}</p>
-        <p>Nascimento:</p><p id="p-user">{{user?.cliente?.dateNasc}}</p> 
-        <p>Telefone:</p><p id="p-user">{{user?.cliente?.phone}}</p> 
-        <p>Usuario:</p><p id="p-user">{{user?.perfis?.type}}</p>
-      </ion-text>
-    </ion-label>
-  </ion-item>
+
+  <div id="container" *ngIf="sniper">
+    <strong>
+      <ion-spinner name="lines-sharp" color="tertiary"></ion-spinner>
+    </strong>
+  </div>
+
+    <ion-item *ngIf="!sniper">
+      <!-- fab placed in the center of the content with a list on each side -->
+          <ion-fab horizontal="end">
+            <ion-fab-button>
+              <ion-icon name="share"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-list side="top">
+              <ion-fab-button (click)="atualizarSenha()"><ion-icon name="key-outline"></ion-icon></ion-fab-button>
+            </ion-fab-list>
+            <ion-fab-list side="bottom">
+              <ion-fab-button (click)="atulizarRegistro()"><ion-icon name="reader-outline"></ion-icon></ion-fab-button>
+            </ion-fab-list>
+            <ion-fab-list side="start">
+              <ion-fab-button (click)="removerRegistro()"><ion-icon name="trash-outline"></ion-icon></ion-fab-button>
+            </ion-fab-list>  
+          </ion-fab>
+          <ion-label class="ion-text-wrap">
+            <ion-text>
+              <p>Codigo registro:</p><p id="p-user">{{user?.id}}</p> 
+              <p>Email:</p><p id="p-user">{{user?.email}}</p>
+              <p>Codigo cliente:</p><p id="p-user">{{user?.cliente?.id}}</p> 
+              <p>Nome:</p><p id="p-user">{{user?.cliente?.name}}</p>
+              <p>CPF:</p><p id="p-user">{{user?.cliente?.cpf}}</p>
+              <p>Nascimento:</p><p id="p-user">{{user?.cliente?.dateNasc}}</p> 
+              <p>Telefone:</p><p id="p-user">{{user?.cliente?.phone}}</p> 
+              <p>Usuario:</p><p id="p-user">{{user?.perfis?.type}}</p>
+            </ion-text>
+          </ion-label>
+        </ion-item>
   <p id="text-center">Registro de endereço</p>
   <ion-item>
     <!-- fab placed in the center of the content with a list on each side -->
@@ -79,6 +86,7 @@
     <ion-icon id="ion-icon" name="receipt-outline"></ion-icon>
     <p id="p-user" class="top-item">Todos os pedidos</p> 
   </div>
+</ion-content>
 <!-- Fade Footer -->
 <ion-footer collapse="fade">
   <ion-toolbar>

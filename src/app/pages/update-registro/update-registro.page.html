@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button>back</ion-back-button>
+    </ion-buttons>
+    <ion-title><h5>Alerar Informações</h5></ion-title>
+    <a>{{user?.cliente?.name}}</a>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-item>
+    <ion-avatar slot="start">
+      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+    </ion-avatar>
+    <ion-label>{{user?.cliente?.name}}</ion-label>
+  </ion-item>
+  <br>
+  <p id="text-center">Informações pessoas</p>
+</ion-content>

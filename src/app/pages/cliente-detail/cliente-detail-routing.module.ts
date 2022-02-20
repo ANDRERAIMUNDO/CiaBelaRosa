@@ -8,6 +8,12 @@ const routes: Routes = [
     path: '',
     component: ClienteDetailPage
   },
+
+  {
+    path: 'update-registro',
+    loadChildren: () => import('../update-registro/update-registro.module').then( m => m.UpdateRegistroPageModule)
+  },
+
   {
     path: 'pedidos-detail',
     loadChildren: () => import('../pedidos-detail/pedidos-detail.module').then( m => m.PedidosDetailPageModule)
