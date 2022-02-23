@@ -6,7 +6,7 @@
       <div>
         <ion-note>Bela Rosa - Clientes</ion-note >  
       </div>
-    <ion-searchbar (ionInput)="onInputFindPage($event)"  placeholder="buscar clientes ? "></ion-searchbar>
+    <ion-searchbar (ionInput)="onInputFindPage($event)" placeholder="buscar clientes ? "></ion-searchbar>
   </ion-toolbar>
     <ion-content>
       <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -40,9 +40,9 @@
         <br>
         <ion-title>Bela Rosa</ion-title>
         <br>
-        <a>{{registroDTO?.cliente?.name}}</a>
+        <a>{{user_registro?.cliente?.name}}</a>
         <br>
-        <a>{{registroDTO?.email}}</a>
+        <a>{{user_registro?.email}}</a>
       </ion-toolbar>
   </ion-header>
   <ion-content>

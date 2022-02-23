@@ -24,9 +24,10 @@ export class PedidosDetailPage implements OnInit {
 
 
   registro_id: string;
-  user: RegistroDTO;
   registroDTO: RegistroDTO;
   clienteDTO: ClienteDTO;
+  user_registro: RegistroDTO;
+  user_cliente: ClienteDTO;
   endereco: Endereco;
   pedido: any [] = [];
   page: number = 0;
@@ -64,9 +65,9 @@ export class PedidosDetailPage implements OnInit {
         this.registroService.findByEmail(localUser.email)
          .subscribe(response=>
            {
-             this.registroDTO = response as RegistroDTO;
+             this.user_registro = response as RegistroDTO;
              this.getCliente();
-             if(this.registroDTO.perfis !=  'CLIENTE' && 'ADMIN'){
+             if(this.user_registro.perfis !=  'CLIENTE' && 'ADMIN'){
                console.log("ok");
              } else {
                this.acessoNegado();
@@ -80,10 +81,10 @@ export class PedidosDetailPage implements OnInit {
   }  
 
   getCliente() {
-    this.clienteService.findById(this.registroDTO.id)
+    this.clienteService.findById(this.user_registro.id)
     .subscribe(response=>
       {
-         this.clienteDTO = response as ClienteDTO;
+         this.user_cliente = response as ClienteDTO;
          this.findByPedidoId();
          this.getEndereco();
       },
@@ -98,7 +99,7 @@ export class PedidosDetailPage implements OnInit {
     this.registroService.findById(registro_id)
     .subscribe(response=> 
       {
-        this.user = response as RegistroDTO;
+        this.registroDTO = response as RegistroDTO;
         //this.getImage();
       }, 
       catchError=>
@@ -122,7 +123,7 @@ export class PedidosDetailPage implements OnInit {
   }
 
   findByPedidoId() {
-    const id = this.user.id;
+    const id = this.registroDTO.id;
     this.pedidoService.findByPedidoId(id, this.page, 24)
     .subscribe(response =>
       {

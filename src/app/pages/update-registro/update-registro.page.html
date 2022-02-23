@@ -3,8 +3,8 @@
     <ion-buttons slot="start">
       <ion-back-button>back</ion-back-button>
     </ion-buttons>
-    <ion-title><h5>Alerar Informações</h5></ion-title>
-    <a>{{user?.cliente?.name}}</a>
+    <ion-title><h5>Alterar Informações</h5></ion-title>
+    <a>{{registroDTO?.cliente?.name}}</a>
   </ion-toolbar>
 </ion-header>
 
@@ -14,23 +14,23 @@
       <ion-avatar slot="start">
         <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
       </ion-avatar>
-      <ion-label>{{user?.cliente?.name}}</ion-label>
+      <ion-label>{{registroDTO?.cliente?.name}}</ion-label>
     </ion-item>
     <br>
-    <p id="text-center">Informações pessoas</p>
+    <p id="text-center">Informaçõe do Registro</p>
           <!--atualizacao de email-->
           <form id="text-center" [formGroup]="formGroupRegistro" (ngSubmit)="updateRegistro(formGroupRegistro.value)">
             <!--email-->
               <a id="text-center">Novo Email</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="email" class="email" placeholder="{{user?.email}}" type="email" required></ion-input>
+                  <ion-input formControlName="email" class="email" placeholder="{{registroDTO?.email}}" type="email" required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupRegistro.controls.email.dirty && formGroupRegistro.controls.email.errors" margin-left>Email invalido. </p>
                 <p *ngIf="emailMsg">Emails estão diferentes. </p>
               <!--emailConfirm-->
               <a id="text-center">Confirmar novo Email</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="emailConfirm" class="email" placeholder="{{user?.email}}" type="email" (ionChange)="onChangeEmail($event)" required></ion-input>
+                  <ion-input formControlName="emailConfirm" class="email" placeholder="{{registroDTO?.email}}" type="email" (ionChange)="onChangeEmail($event)" required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupRegistro.controls.emailConfirm.dirty && formGroupRegistro.controls.emailConfirm.errors" margin-left>Email invalido. </p>
                 <p *ngIf="emailMsg">Emails estão diferentes. </p>
@@ -40,6 +40,33 @@
                   <p *ngIf="!sniper"> Alterar informações </p>
               </ion-button>
           </form>
+          <!--atualizacao de cliente-->
+          <ion-item></ion-item>
+          <p id="text-center">Informações do Cliente</p>
+          <form id="text-center" [formGroup]="formGroupCliente" (ngSubmit)="updateCliente(formGroupCliente.value)">
+            <a id="text-center">Nome</a>
+              <ion-item id="text-center">
+                <ion-input id="text-center" type="text" class="ion-text-uppercase" placeholder="{{registroDTO?.cliente?.name}}" disabled></ion-input>
+              </ion-item>
+              <a id="text-center">CPF</a>
+              <ion-item id="text-center">
+                <ion-input id="text-center" type="text" placeholder="{{registroDTO?.cliente?.cpf}}" disabled></ion-input>
+              </ion-item>
+              <a id="text-center">Data de Nascimento</a>
+              <ion-item id="text-center">
+                <ion-input id="text-center" placeholder="{{registroDTO?.cliente?.dateNasc}}" disabled></ion-input>
+              </ion-item>
+              <a id="text-center">Celular</a>
+              <ion-item id="text-center">
+                <ion-input id="text-center" formControlName ="phone" placeholder="{{registroDTO?.cliente?.phone}}" maxlength="11" inputmode="numeric" type="tel" clear-input required></ion-input>
+              </ion-item>
+              <p *ngIf="formGroupCliente.controls.phone.dirty && formGroupCliente.controls.phone.errors" margin-left>Digite o número do celular.</p>
+            <ion-button *ngIf="formGroupCliente.valid" type="submit" color="light">
+              <ion-spinner *ngIf="sniper" color="secondary" duration = 3 > </ion-spinner>
+              <p *ngIf="sniper"> Atualizando ... </p>
+              <p *ngIf="!sniper"> Alterar informações </p>
+            </ion-button>
+            </form>
   </div>
 </ion-content>
   

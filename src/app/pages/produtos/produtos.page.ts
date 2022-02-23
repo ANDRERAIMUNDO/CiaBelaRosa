@@ -17,8 +17,8 @@ import { StorageService } from 'src/app/services/storage.service';
 })
 export class ProdutosPage implements OnInit {
 
-  registroDTO: RegistroDTO;
-  clienteDTO: ClienteDTO;
+  user_registro: RegistroDTO;
+  user_cliente: ClienteDTO;
 
   constructor(public produtoService: ProdutoService, 
     public router: Router,
@@ -41,9 +41,9 @@ export class ProdutosPage implements OnInit {
           this.registroService.findByEmail(localUser.email)
            .subscribe(response=>
              {
-               this.registroDTO = response as RegistroDTO;
+               this.user_registro = response as RegistroDTO;
                this.getCliente();
-               if(this.registroDTO.perfis !=  'CLIENTE' && 'ADMIN'){
+               if(this.user_registro.perfis !=  'CLIENTE' && 'ADMIN'){
                  console.log("ok");
                } else {
                  this.acessoNegado();
@@ -57,10 +57,10 @@ export class ProdutosPage implements OnInit {
  } 
   
     getCliente() {
-      this.clienteService.findById(this.registroDTO.id)
+      this.clienteService.findById(this.user_registro.id)
       .subscribe(response=>
         {
-           this.clienteDTO = response as ClienteDTO;
+           this.user_cliente = response as ClienteDTO;
         },
         catchError =>
         {

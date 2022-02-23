@@ -27,9 +27,9 @@ export class ClienteDetailPage implements OnInit {
   registro_id: string;
   cliente_id: string;
   endereco_id: string;
-  user: RegistroDTO;
   registroDTO: RegistroDTO;
-  clienteDTO: ClienteDTO;
+  user_registro: RegistroDTO;
+  user_cliente: ClienteDTO;
   endereco: Endereco;
   pedidoDTO: PedidoDTO [] = [];
   pedido: any [] = [];
@@ -77,9 +77,9 @@ export class ClienteDetailPage implements OnInit {
         this.registroService.findByEmail(localUser.email)
          .subscribe(response=>
            {
-             this.registroDTO = response as RegistroDTO;
+             this.user_registro = response as RegistroDTO;
              this.getCliente();
-             if(this.registroDTO.perfis !=  'CLIENTE' && 'ADMIN'){
+             if(this.user_registro.perfis !=  'CLIENTE' && 'ADMIN'){
                console.log("ok");
              } else {
                this.acessoNegado();
@@ -93,11 +93,10 @@ export class ClienteDetailPage implements OnInit {
   }  
 
   getCliente() {
-    this.clienteService.findById(this.registroDTO.id)
+    this.clienteService.findById(this.user_registro.id)
     .subscribe(response=>
       {
-         this.clienteDTO = response as ClienteDTO;
-         this.cliente_id = this.clienteDTO.id;
+         this.user_cliente = response as ClienteDTO;
          this.findByPedidoId();
          this.getEndereco();
       },
@@ -107,37 +106,8 @@ export class ClienteDetailPage implements OnInit {
       });
   }
 
-  registroDetail() {
-    let registro_id = this.registro_id;
-    this.registroService.findById(registro_id)
-    .subscribe(response=> 
-      {
-        this.user = response as RegistroDTO;
-        //this.getImage();
-      }, 
-      catchError=>
-      {
-        console.log(catchError);
-      });
-  }
-
-  getEndereco() {
-    let registro_id = this.registro_id;
-    this.enderecoService.findById(registro_id)
-    .subscribe(response=>
-      {
-        this.endereco = response as Endereco;
-        this.endereco_id = this.endereco.id;
-      },
-     catchError =>
-      {
-        console.log(catchError);
-      }
-    );  
-  }
-
   findByPedidoId() {
-    const id = this.user.id;
+    const id = this.registroDTO.id;
     this.pedidoService.findByPedidoId(id, this.page, 3)
     .subscribe(response =>
       {
@@ -152,6 +122,36 @@ export class ClienteDetailPage implements OnInit {
       });
   }
 
+  registroDetail() {
+    let registro_id = this.registro_id;
+    this.registroService.findById(registro_id)
+    .subscribe(response=> 
+      {
+        this.registroDTO = response as RegistroDTO;
+        this.cliente_id = this.registroDTO.cliente.id;
+        //this.getImage();
+      }, 
+      catchError=>
+      {
+        console.log(catchError);
+      });
+  }
+
+  getEndereco() {
+     let registro_id = this.registro_id;
+    this.enderecoService.findById(registro_id)
+    .subscribe(response=>
+      {
+        this.endereco = response as Endereco;
+        this.endereco_id = this.endereco.id;
+      },
+     catchError =>
+      {
+        console.log(catchError);
+      }
+    );  
+  }
+
   getFindPedidos (registro_id: string) {
     let navigationExtras: NavigationExtras = {
       state: {
@@ -163,7 +163,7 @@ export class ClienteDetailPage implements OnInit {
 
   atualizarSenha() {
     this.sniper = "ok";
-      this.newPasswordDTO.email = this.user.email;
+      this.newPasswordDTO.email = this.registroDTO.email;
       this.authService.sendNewPassword(this.newPasswordDTO)
       .subscribe(response=>
         {

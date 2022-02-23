@@ -4,7 +4,7 @@
       <ion-back-button>back</ion-back-button>
     </ion-buttons>
     <ion-title><h5>Painel do cliente</h5></ion-title>
-    <a>{{user?.cliente?.name}}</a>
+    <a>{{registroDTO?.cliente?.name}}</a>
   </ion-toolbar>
 </ion-header>
 
@@ -13,7 +13,7 @@
     <ion-avatar slot="start">
       <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
     </ion-avatar>
-    <ion-label>{{user?.cliente?.name}}</ion-label>
+    <ion-label>{{registroDTO?.cliente?.name}}</ion-label>
   </ion-item>
   <br>
   <p id="text-center">Informações pessoas</p>
@@ -42,14 +42,14 @@
           </ion-fab>
           <ion-label class="ion-text-wrap">
             <ion-text>
-              <p>Codigo registro:</p><p id="p-user">{{user?.id}}</p> 
-              <p>Email:</p><p id="p-user">{{user?.email}}</p>
-              <p>Codigo cliente:</p><p id="p-user">{{user?.cliente?.id}}</p> 
-              <p>Nome:</p><p id="p-user">{{user?.cliente?.name}}</p>
-              <p>CPF:</p><p id="p-user">{{user?.cliente?.cpf}}</p>
-              <p>Nascimento:</p><p id="p-user">{{user?.cliente?.dateNasc}}</p> 
-              <p>Telefone:</p><p id="p-user">{{user?.cliente?.phone}}</p> 
-              <p>Usuario:</p><p id="p-user">{{user?.perfis?.type}}</p>
+              <p>Codigo registro:</p><p id="p-user">{{registroDTO?.id}}</p> 
+              <p>Email:</p><p id="p-user">{{registroDTO?.email}}</p>
+              <p>Codigo cliente:</p><p id="p-user">{{registroDTO?.cliente?.id}}</p> 
+              <p>Nome:</p><p id="p-user">{{registroDTO?.cliente?.name}}</p>
+              <p>CPF:</p><p id="p-user">{{registroDTO?.cliente?.cpf}}</p>
+              <p>Nascimento:</p><p id="p-user">{{registroDTO?.cliente?.dateNasc}}</p> 
+              <p>Telefone:</p><p id="p-user">{{registroDTO?.cliente?.phone}}</p> 
+              <p>Usuario:</p><p id="p-user">{{registroDTO?.perfis?.type}}</p>
             </ion-text>
           </ion-label>
         </ion-item>
@@ -82,7 +82,7 @@
     </ion-item>
   </ion-list>
   <ion-item></ion-item>
-  <div id="text-center" (click)="getFindPedidos(user?.id)"> 
+  <div id="text-center" (click)="getFindPedidos(registroDTO?.id)"> 
     <ion-icon id="ion-icon" name="receipt-outline"></ion-icon>
     <p id="p-user" class="top-item">Todos os pedidos</p> 
   </div>

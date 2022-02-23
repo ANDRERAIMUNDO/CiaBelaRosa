@@ -22,7 +22,8 @@ export class UpdateRegistroPage implements OnInit {
   registro_id: string;
   cliente_id: string;
   endereco_id: string;
-  user: RegistroDTO;
+  user_registro: RegistroDTO;
+  user_cliente: ClienteDTO;
   registroDTO: RegistroDTO;
   clienteDTO: ClienteDTO;
   endereco: Endereco;
@@ -89,16 +90,16 @@ export class UpdateRegistroPage implements OnInit {
     this.sniper = null;
   }
 
-  getMyData(){//registroDTO
+  getMyData(){
     let localUser = this.storageService.getLocalUser();
      if (localUser && localUser.email)
       {
         this.registroService.findByEmail(localUser.email)
          .subscribe(response=>
            {
-             this.registroDTO = response as RegistroDTO;
+             this.user_registro = response as RegistroDTO;
              this.getCliente();
-             if(this.registroDTO.perfis !=  'CLIENTE' && 'ADMIN'){
+             if(this.user_registro.perfis !=  'CLIENTE' && 'ADMIN'){
                console.log("ok");
              } else {
                this.acessoNegado();
@@ -112,10 +113,10 @@ export class UpdateRegistroPage implements OnInit {
   }  
 
   getCliente() {
-    this.clienteService.findById(this.registroDTO.id)
+    this.clienteService.findById(this.user_registro.id)
     .subscribe(response=>
       {
-         this.clienteDTO = response as ClienteDTO;
+         this.user_cliente = response as ClienteDTO;
          this.getEndereco();
       },
       catchError =>
@@ -125,7 +126,7 @@ export class UpdateRegistroPage implements OnInit {
   }
 
   getEndereco() {
-    let registro_id = this.user.id;
+    let registro_id = this.registroDTO.id;
     this.enderecoService.findById(registro_id)
     .subscribe(response=>
       {
@@ -144,7 +145,7 @@ export class UpdateRegistroPage implements OnInit {
     this.registroService.findById(registro_id)
     .subscribe(response=> 
       {
-        this.user = response as RegistroDTO;
+        this.registroDTO = response as RegistroDTO;
         //this.getImage();
       }, 
       catchError=>
@@ -158,7 +159,7 @@ export class UpdateRegistroPage implements OnInit {
     this.button = true;
     this.sniper = "ok";
 
-    this.registroService.updateEmail(this.user.id, registroform)
+    this.registroService.updateEmail(this.registroDTO.id, registroform)
       .subscribe(response =>
         {
           console.log(response);
@@ -177,7 +178,6 @@ export class UpdateRegistroPage implements OnInit {
 
   formRegistro() {
     this.registro_id  = this.route.snapshot.params['id'];
-   // this.registro_id  = this.registro_id;
     this.formGroupRegistro =  this.formBuilder.group(
     { 
       email: ['', Validators.email],
@@ -185,6 +185,26 @@ export class UpdateRegistroPage implements OnInit {
     })
   }
 
+  updateCliente(clienteform: NgForm) {
+    this.button = true;
+    this.sniper = "ok";
+   this.clienteService.update(this.registroDTO.cliente.id, clienteform)
+   .subscribe(response =>
+    {
+      console.log(response);
+      this.contentRegistro = null;
+      this.successUpdate = "ok";  
+   
+    }, catchError=>
+      {
+        this.button = false;
+        this.sniper = null;
+        console.log(catchError);
+        this.contentRegistro = null;
+        this.errorUpdate = "ok";
+      });
+  }
+  
   formCliente() {
     this.registro_id  = this.registro_id;
     this.formGroupCliente =  this.formBuilder.group(
