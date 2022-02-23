@@ -27,22 +27,32 @@
   margin-top: auto;
 }
 
+#container-no-cart{
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 40%;
+  transform: translateY(-50%);
+}
+
+.ion-text-center {
+  text-align: center; 
+  left: 100px;
+  right: 100px;
+  position: absolute;
+}
+
+img {
+  width: 60px;
+  height: 60px;
+}
+
 ion-footer {
     text-align: center;
     left: 0;
     right: 0;
   }
 
-ion-spinner {
-    color:rgb(115, 96, 226);
-    width: 30px;
-    height: 30px;
-    transform: scale(6);
- }
-
-#container strong {
-  font-size: 50px;
-  line-height: 16px;
-}
 
   

@@ -187,7 +187,7 @@ export class ClienteDetailPage implements OnInit {
           registro_id: registro_id,
           cliente_id: cliente_id
         }
-      };
+      }
       this.router.navigate(['home/clientes/cliente-detail/update-registro'], navigationExtras);
   }
 

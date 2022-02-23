@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
 import { Endereco } from 'src/app/models/endereco';
 import { RegistroDTO } from 'src/app/models/registro.dto';
+import { RegistroUpdateEmailDTO } from 'src/app/models/registroUpdateEmail.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { EnderecoService } from 'src/app/services/endereco.service';
@@ -25,11 +26,28 @@ export class UpdateRegistroPage implements OnInit {
   registroDTO: RegistroDTO;
   clienteDTO: ClienteDTO;
   endereco: Endereco;
+  registroUpdateEmailDTO: RegistroUpdateEmailDTO = 
+    {
+      email: ""
+    };
   router_endereco: string;
   router_registro_cliente: string;
   formGroupRegistro: FormGroup;
   formGroupCliente: FormGroup;
   formGroupAddress: FormGroup;
+
+  emailMsg: string;
+  validEmailMsg: string;
+  email: string;
+  newEmail: string;
+  emailConfirm: string;
+
+  sniper : string;
+  button = false;
+
+  contentRegistro: string;
+  errorUpdate: string;
+  successUpdate: string;
 
     constructor(public storageService: StorageService, 
     public clienteService: ClienteService, 
@@ -63,6 +81,12 @@ export class UpdateRegistroPage implements OnInit {
     this.formRegistro();
     this.formCliente();
     this.formAddress();
+    this.contentRegistro = "ok";
+    this.validEmailMsg = "ok;"
+    this.successUpdate = null;
+    this.errorUpdate = null;
+    this.button = false;
+    this.sniper = null;
   }
 
   getMyData(){//registroDTO
@@ -100,6 +124,21 @@ export class UpdateRegistroPage implements OnInit {
       });
   }
 
+  getEndereco() {
+    let registro_id = this.user.id;
+    this.enderecoService.findById(registro_id)
+    .subscribe(response=>
+      {
+        this.endereco = response as Endereco;
+        this.endereco_id = this.endereco.id;
+      },
+     catchError =>
+      {
+        console.log(catchError);
+      }
+    );  
+  }
+
   registroDetail() {
     let registro_id = this.registro_id;
     this.registroService.findById(registro_id)
@@ -114,16 +153,39 @@ export class UpdateRegistroPage implements OnInit {
       });
   }
 
-  formRegistro () {
-    this.registro_id  = this.registro_id;
+  updateRegistro(registroform: NgForm) {
+    console.log(this.registroUpdateEmailDTO);
+    this.button = true;
+    this.sniper = "ok";
+
+    this.registroService.updateEmail(this.user.id, registroform)
+      .subscribe(response =>
+        {
+          console.log(response);
+          this.contentRegistro = null;
+          this.successUpdate = "ok";  
+          
+        }, catchError=>
+          {
+            this.button = false;
+            this.sniper = null;
+            console.log(catchError);
+            this.contentRegistro = null;
+            this.errorUpdate = "ok";
+          });
+  }
+
+  formRegistro() {
+    this.registro_id  = this.route.snapshot.params['id'];
+   // this.registro_id  = this.registro_id;
     this.formGroupRegistro =  this.formBuilder.group(
     { 
       email: ['', Validators.email],
       emailConfirm: ['', Validators.email]
-    });
+    })
   }
 
-  formCliente () {
+  formCliente() {
     this.registro_id  = this.registro_id;
     this.formGroupCliente =  this.formBuilder.group(
     {
@@ -145,19 +207,25 @@ export class UpdateRegistroPage implements OnInit {
       });
   }
 
-  getEndereco() {
-    let registro_id = this.registro_id;
-    this.enderecoService.findById(registro_id)
-    .subscribe(response=>
+  onChangeEmail(event: any) {
+    this.newEmail = this.formGroupRegistro.get('email').value;
+    this.emailConfirm = this.formGroupRegistro.get('emailConfirm').value;
+    let newEmail = this.newEmail;
+    let emailConfirm = this.emailConfirm;
+    if (newEmail == emailConfirm) 
       {
-        this.endereco = response as Endereco;
-        this.endereco_id = this.endereco.id;
-      },
-     catchError =>
-      {
-        console.log(catchError);
-      }
-    );  
+        this.registroUpdateEmailDTO.email = newEmail;
+        this.emailMsg = null;
+        this.validEmailMsg = null;
+      } else 
+        {
+          this.emailMsg = "ok";
+          this.validEmailMsg = "ok";
+        }
+  }
+
+  return() {
+    this.router.navigate(['home/clientes']);
   }
 
   async acessoNegado() {

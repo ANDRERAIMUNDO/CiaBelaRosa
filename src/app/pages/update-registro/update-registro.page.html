@@ -7,13 +7,76 @@
     <a>{{user?.cliente?.name}}</a>
   </ion-toolbar>
 </ion-header>
-<ion-content>
-  <ion-item>
-    <ion-avatar slot="start">
-      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
-    </ion-avatar>
-    <ion-label>{{user?.cliente?.name}}</ion-label>
-  </ion-item>
-  <br>
-  <p id="text-center">Informações pessoas</p>
+
+<ion-content *ngIf="contentRegistro">
+  <div *ngIf="!errorUpdate">
+    <ion-item>
+      <ion-avatar slot="start">
+        <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y">
+      </ion-avatar>
+      <ion-label>{{user?.cliente?.name}}</ion-label>
+    </ion-item>
+    <br>
+    <p id="text-center">Informações pessoas</p>
+          <!--atualizacao de email-->
+          <form id="text-center" [formGroup]="formGroupRegistro" (ngSubmit)="updateRegistro(formGroupRegistro.value)">
+            <!--email-->
+              <a id="text-center">Novo Email</a>
+                <ion-item id="text-center">
+                  <ion-input formControlName="email" class="email" placeholder="{{user?.email}}" type="email" required></ion-input>
+                </ion-item>
+                <p *ngIf="formGroupRegistro.controls.email.dirty && formGroupRegistro.controls.email.errors" margin-left>Email invalido. </p>
+                <p *ngIf="emailMsg">Emails estão diferentes. </p>
+              <!--emailConfirm-->
+              <a id="text-center">Confirmar novo Email</a>
+                <ion-item id="text-center">
+                  <ion-input formControlName="emailConfirm" class="email" placeholder="{{user?.email}}" type="email" (ionChange)="onChangeEmail($event)" required></ion-input>
+                </ion-item>
+                <p *ngIf="formGroupRegistro.controls.emailConfirm.dirty && formGroupRegistro.controls.emailConfirm.errors" margin-left>Email invalido. </p>
+                <p *ngIf="emailMsg">Emails estão diferentes. </p>
+              <ion-button *ngIf="!validEmailMsg" disabled = "{{button}}" type="submit" color="light" expand="block">
+                <ion-spinner *ngIf="sniper" color="secondary" > </ion-spinner>
+                  <p *ngIf="sniper"> Atualizando ... </p>
+                  <p *ngIf="!sniper"> Alterar informações </p>
+              </ion-button>
+          </form>
+  </div>
+</ion-content>
+  
+<ion-content *ngIf="errorUpdate">
+  <div id="container-no-cart" >
+    <ion-label>
+      <img src="../../assets/emoji-no-cart.svg">
+    </ion-label>
+    <br>
+    <ion-label class="ion-text-center"> 
+      <p>Não foi possivel alterar informações.</p>
+      <p>Tente novamente.</p>
+    </ion-label>
+    <br>
+    <ion-item></ion-item>
+    <ion-item (click)="return()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+      <h5 class="ion-text-center">Retornar</h5>
+    </ion-item>
+  </div>
+</ion-content>
+
+<ion-content *ngIf="successUpdate">
+  <div id="container-no-cart"  >
+    <ion-label>
+      <img src="../../assets/happy-outline.svg">
+    </ion-label>
+    <br>
+    <ion-label class="ion-text-center"> 
+      <p>As alterações foram feitas.</p>
+      <p>Por favor retorne.</p>
+    </ion-label>
+    <br>
+    <ion-item></ion-item>
+    <ion-item (click)="return()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+      <h5 class="ion-text-center">Retornar</h5>
+    </ion-item>
+  </div>
 </ion-content>
