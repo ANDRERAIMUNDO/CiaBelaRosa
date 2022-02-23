@@ -128,7 +128,6 @@ export class PedidosDetailPage implements OnInit {
       {
         let start = this.pedido.length;
         this.pedido = this.pedido.concat(response['content']);
-        console.log(this.pedido);
         let end = this.pedido.length -1;
      //   this.loadImage(start, end);
       },
