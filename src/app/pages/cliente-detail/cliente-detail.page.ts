@@ -137,8 +137,8 @@ export class ClienteDetailPage implements OnInit {
   }
 
   findByPedidoId() {
-    const name = '';
-    this.pedidoService.findByPedidoId(name, this.page, 3)
+    const id = this.user.id;
+    this.pedidoService.findByPedidoId(id, this.page, 3)
     .subscribe(response =>
       {
         let start = this.pedido.length;

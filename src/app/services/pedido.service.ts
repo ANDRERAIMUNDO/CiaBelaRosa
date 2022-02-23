@@ -35,9 +35,9 @@ export class PedidoService {
         return this.httpClient.get<any[]>(`${API_CONFIG.baseUrl}/pedidos/?name=${name}`,{ 'headers': authHeader });
     }
 
-    findByPedidoId(name: string, page: number=0, linesPerPages: number=12) {
+    findByPedidoId(id: string, page: number=0, linesPerPages: number=12) {
         let token = this.storageService.getLocalUser().token;
         let authHeader = new HttpHeaders ({'Authorization': 'Bearer '+ token});
-        return this.httpClient.get(`${API_CONFIG.baseUrl}/pedidos/id/?name=${name}&page=${page}&linesPerPages=${linesPerPages}`, {'headers': authHeader });
+        return this.httpClient.get(`${API_CONFIG.baseUrl}/pedidos/id/?id=${id}&page=${page}&linesPerPages=${linesPerPages}`, {'headers': authHeader });
     }
 }

@@ -122,8 +122,8 @@ export class PedidosDetailPage implements OnInit {
   }
 
   findByPedidoId() {
-    const name = '';
-    this.pedidoService.findByPedidoId(name, this.page, 24)
+    const id = this.user.id;
+    this.pedidoService.findByPedidoId(id, this.page, 24)
     .subscribe(response =>
       {
         let start = this.pedido.length;
