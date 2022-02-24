@@ -139,7 +139,6 @@ export class UpdateEnderecoPage implements OnInit {
   }
 
   updateAddress(enderecoform: NgForm) {
-    console.log(this.formGroupAddress);
     this.button = true;
     this.sniper = "ok";
 
@@ -180,8 +179,7 @@ export class UpdateEnderecoPage implements OnInit {
       this.clienteService.viaCep(this.newCep)
       .subscribe(response=>
         {
-          this.endereco = response;
-          console.log(this.endereco);
+          this.enderecoUpdateDTO = response as EnderecoUpdateDTO;//corrigir
           this.cepMsg = null;
         },
           catchError => 

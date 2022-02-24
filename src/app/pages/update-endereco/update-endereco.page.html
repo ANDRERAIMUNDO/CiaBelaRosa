@@ -23,42 +23,42 @@
             <!--email-->
               <a id="text-center">cep</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="cep" placeholder="{{endereco?.cep}}" (ionChange)="onChangeCep($event)" required></ion-input>
+                  <ion-input formControlName="cep" placeholder="{{endereco?.cep}}" (ionChange)="onChangeCep($event)" value='{{enderecoUpdateDTO?.cep}}' required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupAddress.controls.cep.dirty && formGroupAddress.controls.cep.errors" margin-left>Obrigátorio.</p>
                 <a id="text-center">Logradouro</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="logradouro" placeholder="{{endereco?.logradouro}}"required></ion-input>
+                  <ion-input formControlName="logradouro" placeholder="{{endereco?.logradouro}}" value='{{enderecoUpdateDTO?.logradouro}}' required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupAddress.controls.logradouro.dirty && formGroupAddress.controls.logradouro.errors" margin-left>Obrigátorio.</p>
                 <p *ngIf="cepMsg">Entre com informações manualmente </p>
                 <a id="text-center">Numero</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="numero" placeholder="{{endereco?.numero}}"required></ion-input>
+                  <ion-input formControlName="numero" placeholder="{{endereco?.numero}}" value='{{enderecoUpdateDTO?.numero}}'required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupAddress.controls.numero.dirty && formGroupAddress.controls.numero.errors" margin-left>Obrigátorio.</p>
                 <p *ngIf="cepMsg">Entre com informações manualmente </p>                    
                 <a id="text-center">Complemento</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="complemento" placeholder="{{endereco?.complemento}}"required></ion-input>
+                  <ion-input formControlName="complemento" placeholder="{{endereco?.complemento}}" value='{{enderecoUpdateDTO?.complemento}}' required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupAddress.controls.complemento.dirty && formGroupAddress.controls.complemento.errors" margin-left>Obrigátorio.</p>
                 <p *ngIf="cepMsg">Entre com informações manualmente </p>       
                 <a id="text-center">Bairro</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="bairro" placeholder="{{endereco?.bairro}}"required></ion-input>
+                  <ion-input formControlName="bairro" placeholder="{{endereco?.bairro}}" value='{{enderecoUpdateDTO?.bairro}}' required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupAddress.controls.bairro.dirty && formGroupAddress.controls.bairro.errors" margin-left>Obrigátorio.</p>
                 <p *ngIf="cepMsg">Entre com informações manualmente </p>
                 <a id="text-center">Localidade</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="localidade" placeholder="{{endereco?.localidade}}"required></ion-input>
+                  <ion-input formControlName="localidade" placeholder="{{endereco?.localidade}}" value='{{enderecoUpdateDTO?.localidade}}' required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupAddress.controls.localidade.dirty && formGroupAddress.controls.localidade.errors" margin-left>Obrigátorio.</p>
                 <p *ngIf="cepMsg">Entre com informações manualmente </p>       
                 <a id="text-center">Estado</a>
                 <ion-item id="text-center">
-                  <ion-input formControlName="uf" placeholder="{{endereco?.uf}}"required></ion-input>
+                  <ion-input formControlName="uf" placeholder="{{endereco?.uf}}" value='{{enderecoUpdateDTO?.uf}}' required></ion-input>
                 </ion-item>
                 <p *ngIf="formGroupAddress.controls.uf.dirty && formGroupAddress.controls.uf.errors" margin-left>Obrigátorio.</p>
                 <p *ngIf="cepMsg">Entre com informações manualmente </p>       
