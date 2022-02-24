@@ -237,4 +237,50 @@ export class ClienteDetailPage implements OnInit {
     console.log('onDidDismiss resolved with role', role);
   }
 
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm!',
+      message: '<strong>Resetar senha do cliente</strong>???',
+      buttons: [
+        {
+          text: 'Não',
+          role: 'cancel',
+          cssClass: 'secondary',
+          id: 'cancel-button',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Sim',
+          id: 'confirm-button',
+          handler: () => {
+           this.atualizarSenha();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+
+  async presentAlertConfirmDelete() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Desculpe',
+      message: '<strong>Função indisponivel. </strong>',
+      buttons: [
+        {
+          text: 'Voltar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          id: 'cancel-button',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 }
