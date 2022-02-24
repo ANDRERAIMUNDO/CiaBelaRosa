@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
 import { Endereco } from 'src/app/models/endereco';
+import { EnderecoUpdateDTO } from 'src/app/models/enderecoUpdate.dto';
 import { RegistroDTO } from 'src/app/models/registro.dto';
-import { RegistroUpdateEmailDTO } from 'src/app/models/registroUpdateEmail.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClienteService } from 'src/app/services/cliente.service';
 import { EnderecoService } from 'src/app/services/endereco.service';
@@ -13,12 +13,13 @@ import { RegistroService } from 'src/app/services/registro.service';
 import { StorageService } from 'src/app/services/storage.service';
 
 @Component({
-  selector: 'app-update-registro',
-  templateUrl: './update-registro.page.html',
-  styleUrls: ['./update-registro.page.scss'],
+  selector: 'app-update-endereco',
+  templateUrl: './update-endereco.page.html',
+  styleUrls: ['./update-endereco.page.scss'],
 })
-export class UpdateRegistroPage implements OnInit {
+export class UpdateEnderecoPage implements OnInit {
 
+  
   registro_id: string;
   cliente_id: string;
   endereco_id: string;
@@ -27,20 +28,13 @@ export class UpdateRegistroPage implements OnInit {
   registroDTO: RegistroDTO;
   clienteDTO: ClienteDTO;
   endereco: Endereco;
-  registroUpdateEmailDTO: RegistroUpdateEmailDTO = 
-    {
-      email: ""
-    };
+  enderecoUpdateDTO:EnderecoUpdateDTO;
   router_endereco: string;
   router_registro_cliente: string;
-  formGroupRegistro: FormGroup;
-  formGroupCliente: FormGroup;
+  formGroupAddress: FormGroup;
 
-  emailMsg: string;
-  validEmailMsg: string;
-  email: string;
-  newEmail: string;
-  emailConfirm: string;
+  cepMsg: string;
+  newCep: string;
 
   sniper : string;
   button = false;
@@ -65,12 +59,6 @@ export class UpdateRegistroPage implements OnInit {
           this.router_registro_cliente = getNav.extras.state.router_registro_cliente;
           this.registro_id = getNav.extras.state.registro_id;
           this.cliente_id = getNav.extras.state.cliente_id;
-          this.endereco_id = getNav.extras.state.endereco_id;
-          console.log( "router_endereco: " + this.router_endereco);//teste
-          console.log( "router_registro_cliente: " + this.router_registro_cliente);//teste
-          console.log( "registro_id: " + this.registro_id);//teste
-          console.log( "cliente_id: " + this.cliente_id);//teste
-          console.log( "endereco_id: " + this.endereco_id);//teste
         }
       }); 
      }
@@ -78,10 +66,8 @@ export class UpdateRegistroPage implements OnInit {
   ngOnInit() {
     this.getMyData();
     this.registroDetail();
-    this.formRegistro();
-    this.formCliente();
+    this.formAddress();
     this.contentRegistro = "ok";
-    this.validEmailMsg = "ok;"
     this.successUpdate = null;
     this.errorUpdate = null;
     this.button = false;
@@ -152,12 +138,12 @@ export class UpdateRegistroPage implements OnInit {
       });
   }
 
-  updateRegistro(registroform: NgForm) {
-    console.log(this.registroUpdateEmailDTO);
+  updateAddress(enderecoform: NgForm) {
+    console.log(this.formGroupAddress);
     this.button = true;
     this.sniper = "ok";
 
-    this.registroService.updateEmail(this.registroDTO.id, registroform)
+    this.enderecoService.update(this.endereco.id, enderecoform)
       .subscribe(response =>
         {
           console.log(response);
@@ -174,58 +160,35 @@ export class UpdateRegistroPage implements OnInit {
           });
   }
 
-  formRegistro() {
-    this.registro_id  = this.route.snapshot.params['id'];
-    this.formGroupRegistro =  this.formBuilder.group(
-    { 
-      email: ['', Validators.email],
-      emailConfirm: ['', Validators.email]
-    })
-  }
-
-  updateCliente(clienteform: NgForm) {
-    this.button = true;
-    this.sniper = "ok";
-   this.clienteService.update(this.registroDTO.cliente.id, clienteform)
-   .subscribe(response =>
-    {
-      console.log(response);
-      this.contentRegistro = null;
-      this.successUpdate = "ok";  
-   
-    }, catchError=>
+  formAddress() {
+    this.endereco_id  = this.endereco_id;
+    this.formGroupAddress =  this.formBuilder.group(
       {
-        this.button = false;
-        this.sniper = null;
-        console.log(catchError);
-        this.contentRegistro = null;
-        this.errorUpdate = "ok";
+        cep: ['', [Validators.required]],
+        logradouro: ['',[Validators.required]],  
+        numero: ['', [Validators.required]],
+        complemento: ['', [Validators.required]],
+        bairro: ['', [Validators.required]],
+        localidade:['', [Validators.required]],
+        uf: ['', [Validators.required]],
       });
   }
-  
-  formCliente() {
-    this.registro_id  = this.registro_id;
-    this.formGroupCliente =  this.formBuilder.group(
-    {
-      phone: [null,[Validators.required, Validators.minLength(11)]]
-    });
-  }
 
-  onChangeEmail(event: any) {
-    this.newEmail = this.formGroupRegistro.get('email').value;
-    this.emailConfirm = this.formGroupRegistro.get('emailConfirm').value;
-    let newEmail = this.newEmail;
-    let emailConfirm = this.emailConfirm;
-    if (newEmail == emailConfirm) 
-      {
-        this.registroUpdateEmailDTO.email = newEmail;
-        this.emailMsg = null;
-        this.validEmailMsg = null;
-      } else 
+  onChangeCep(event: any) {
+    this.newCep = this.formGroupAddress.get('cep').value;
+    if (this.newCep.length == 8) {
+      this.clienteService.viaCep(this.newCep)
+      .subscribe(response=>
         {
-          this.emailMsg = "ok";
-          this.validEmailMsg = "ok";
-        }
+          this.endereco = response;
+          console.log(this.endereco);
+          this.cepMsg = null;
+        },
+          catchError => 
+          {
+            this.cepMsg = "ok";
+          });
+    }
   }
 
   return() {

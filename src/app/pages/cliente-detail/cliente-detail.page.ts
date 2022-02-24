@@ -26,7 +26,7 @@ export class ClienteDetailPage implements OnInit {
 
   registro_id: string;
   cliente_id: string;
-  endereco_id: string;
+  endereco_id: string;//falta receber
   registroDTO: RegistroDTO;
   user_registro: RegistroDTO;
   user_cliente: ClienteDTO;
@@ -206,7 +206,7 @@ export class ClienteDetailPage implements OnInit {
           endereco_id: endereco_id
         }
       };
-      this.router.navigate(['home/clientes/cliente-detail/update-registro'], navigationExtras);
+      this.router.navigate(['home/clientes/cliente-detail/update-endereco'], navigationExtras);
   }
 
   logout(){
