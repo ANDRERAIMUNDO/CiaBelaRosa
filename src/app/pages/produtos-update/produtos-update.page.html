@@ -1,7 +1,86 @@
+
+<div *ngIf="!produto_id">
+    <ion-header id="container-header"> 
+      <ion-toolbar>
+        <p>Bela Rosa - Catalago de Produtos</p>
+        <ion-searchbar (ionInput)="onInput($event)"  placeholder="procurar produto?" ></ion-searchbar>
+      </ion-toolbar>
+        <ion-content>
+          <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+            <br>
+            <a>Arraste para baixo para atualiar.</a>
+            <br>
+            <ion-icon id="ion-icon-refresher" name="arrow-down-outline"></ion-icon>
+            <ion-refresher-content refreshingSpinner="circular"></ion-refresher-content>
+          </ion-refresher>
+        </ion-content>
+    </ion-header>
+  </div>
+
+  <ion-content *ngIf="!produto_id" id="container">
+      <div>
+        <ion-list>
+          <ion-item *ngFor="let item of itens" button (click)="produtoDetail(item.id)" detail>
+              <ion-thumbnail class="ion-thumbnail" item-start>
+                <img [src]="item.imageUrl || '../../assets/icon/camera-outline.svg'">
+              </ion-thumbnail>
+                <strong>{{item.id}}</strong>
+                <ion-label>
+                  <p class="ion-text-center">{{item.name}}</p>
+                  <p class="ion-text-center">R{{item.price | currency}}</p>
+                </ion-label> 
+          </ion-item>
+        </ion-list>  
+      </div>  
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+      <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Carregando mais produtos...">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+  </ion-content>
+
+<div *ngIf="produto_id">
+
+  <div>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-back-button>back</ion-back-button>
+        </ion-buttons>
+        <p>Bela Rosa - Catalago de Produtos</p>
+      </ion-toolbar>
+    </ion-header>
+  <div>
+
+  <div>
+    <ion-card>
+        <img [src]="item.imageUrl || '../../assets/icon/camera-outline.svg'">
+    </ion-card>
+  
+    <div class="ion-text-center">
+      <a>{{detail?.name}}</a>
+      <p>{{item?.name}}</p>
+      <p> R{{item?.price | currency}}</p>
+    </div>
+      <ion-button block outline expand="block" color="light">Atualizar</ion-button>
+      <br>
+      <ion-button block outline expand="block" color="light">Deletar Produto</ion-button>
+      <br>
+      <ion-button block outline expand="block" color="light" (click)="atualizarCatalago()">Voltar</ion-button>
+  </div>
+</div>
+
 <ion-menu side="start" menuId="first" contentId="main">
   <ion-header>
-      <ion-toolbar color="primary">
-        <ion-title>Start Menu</ion-title>
+      <ion-toolbar color="light">
+        <br>
+        <ion-title>Bela Rosa</ion-title>
+        <br>
+        <a>{{user_registro?.cliente?.name}}</a>
+        <br>
+        <a>{{user_registro?.email}}</a>
       </ion-toolbar>
   </ion-header>
   <ion-content>
@@ -12,21 +91,14 @@
       <ion-item (click)="meusPedidos()"><ion-icon slot="start" name="book-outline"></ion-icon><ion-label>Meus Pedidos</ion-label></ion-item>
       <ion-item (click)="pedidosPendentes()"><ion-icon slot="start" name="cart-outline"></ion-icon><ion-label>Pedidos Pendentes</ion-label></ion-item>
       <ion-item (click)="configuracoes()"><ion-icon slot="start" name="settings-outline"></ion-icon><ion-label>Configurações</ion-label></ion-item>
-      <ion-item (click)="logout()"><ion-icon slot="start" name="log-out-outline"></ion-icon><ion-label>Sair da conta</ion-label></ion-item>      
+      <ion-item (click)="logout()"><ion-icon slot="start" name="log-out-outline"></ion-icon><ion-label>Sair da conta</ion-label></ion-item>        
       </ion-list>
   </ion-content>
 </ion-menu>
 
-<ion-router-outlet id="main"></ion-router-outlet>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Titulo da pagina</ion-title>
-    </ion-toolbar>
-  </ion-header>
-    <div id="container">
-      <strong class="capitalize">conteudo aqui</strong>
-      <p>Explore <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-    </div>
-  </ion-content>
+<!-- Fade Footer -->
+<ion-footer collapse="fade">
+  <ion-toolbar>
+    <a>@BelaRosa 2022 - Possui direitos reservados</a>
+  </ion-toolbar>
+</ion-footer>

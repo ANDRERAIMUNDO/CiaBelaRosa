@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { ClienteDTO } from 'src/app/models/cliente.dto';
+import { ProdutoDTO } from 'src/app/models/produto.dto';
 import { RegistroDTO } from 'src/app/models/registro.dto';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClienteService } from 'src/app/services/cliente.service';
@@ -9,6 +10,7 @@ import { EnderecoService } from 'src/app/services/endereco.service';
 import { ProdutoService } from 'src/app/services/produto.service';
 import { RegistroService } from 'src/app/services/registro.service';
 import { StorageService } from 'src/app/services/storage.service';
+import { API_CONFIG } from 'src/config/config';
 
 @Component({
   selector: 'app-produtos',
@@ -19,6 +21,9 @@ export class ProdutosPage implements OnInit {
 
   user_registro: RegistroDTO;
   user_cliente: ClienteDTO;
+  itens: ProdutoDTO [] = [];
+  page: number = 0;
+  image: string;
 
   constructor(public produtoService: ProdutoService, 
     public router: Router,
@@ -31,9 +36,9 @@ export class ProdutosPage implements OnInit {
 
     ngOnInit() {
       this.getMyData();
+      this.getProduto();
     }
   
-
     getMyData(){
       let localUser = this.storageService.getLocalUser();
        if (localUser && localUser.email)
@@ -54,7 +59,7 @@ export class ProdutosPage implements OnInit {
        {
          this.router.navigate(['/login']);
        }
- } 
+    } 
   
     getCliente() {
       this.clienteService.findById(this.user_registro.id)
@@ -68,8 +73,85 @@ export class ProdutosPage implements OnInit {
         });
     }
 
+    getProduto() {
+      const name = '';
+      this.produtoService.searchAll(name, this.page, 12)
+      .subscribe(response =>
+        {
+          let start = this.itens.length;
+          this.itens = this.itens.concat(response['content']);
+          let end = this.itens.length -1;
+          this.loadImage(start, end);
+        },
+        catchError =>                                                                                                                                                                                                                                                                                               
+        {
+          console.log(catchError);
+        });
+    }
+
+    loadImage(start: number, end: number) {
+      for (var i = start; i<= end; i++) {
+        let item = this.itens[i];
+        this.produtoService.getProdutoImage(item.id)
+        .subscribe(response =>
+          {
+            item.imageUrl = `${API_CONFIG.bukectBaseUrl}/produtos/prod${item.id}-small.png`;
+            this.image = "ok";
+          },
+          catchError => 
+          {
+            if (catchError)
+            {
+              console.log("not image");
+              item.imageUrl = '../../assets/icon/camera-outline.svg';
+            }
+          });
+      }
+    }
+
+    doRefresh(event) {
+      this.page = 0;
+      this.itens = [];
+      const name = event.target.value;
+      this.produtoService.searchAll(name,this.page,0)
+      .subscribe(response => {
+        let start = this.itens.length;
+        this.itens = this.itens.concat(response['content']);  
+        let end = this.itens.length -1;
+        this.loadImage(start, end);
+      });
+      this.getProduto();
+      setTimeout(() => {
+        event.target.complete();
+      }, 3000);
+    }
+    
+    loadData(event) {
+      this.getProduto();
+      setTimeout(() => {
+        event.target.complete();
+      }, 2000);
+    }
+
+    onInput(event: any){
+      this.page = 0;
+      this.itens = [];
+      const name = event.target.value;
+      this.produtoService.searchAll(name,this.page,0)
+      .subscribe(response => {
+        let start = this.itens.length;
+        this.itens = this.itens.concat(response['content']);  
+        let end = this.itens.length -1;
+        this.loadImage(start, end);
+      });
+  }
+
+  produtoDetail(produto_id: string) {
+    this.router.navigate(['/home/produtos/produtos-update',{produto_id: produto_id}]);
+  }
+
   atualizarCatalago() {
-    this.router.navigate(['/home/produtos/produtos-update']);
+    this.router.navigate(['/home/produtos/produtos-update']);  
   }
 
   meusProdutos() {
